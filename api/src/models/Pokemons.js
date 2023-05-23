@@ -3,10 +3,11 @@ const { DataTypes } = require('sequelize');
 // Luego le injectamos la conexion a sequelize.
 module.exports = (sequelize) => {
   // defino el modelo
-  sequelize.define('Pokemons', {
+  sequelize.define('pokemons', {
     id: { // ID. *
       type: DataTypes.UUID,
       primaryKey: true,
+      allowNull: false,
       defaultValue: DataTypes.UUIDV4
     },    
     name: { // Nombre. *
@@ -14,33 +15,34 @@ module.exports = (sequelize) => {
       allowNull: false,
     },
     image: { // Imagen. *
-      type: DataTypes.BLOB,
+      type: DataTypes.STRING, //results.sprites.other.dream-world.front_default
       allowNull: false,
     },
     hp: { // Vida. *
       type: DataTypes.INTEGER,
       allowNull: false,
-    }, //stats.stat.name && stats.base_stat
+    }, //stats.stat.name === "hp" && stats.base_stat
     attack: { // Ataque. *
       type: DataTypes.INTEGER,
       allowNull: false,
-    }, //stats.stat.name && stats.base_stat
+    }, //stats.stat.name === "attack" && stats.base_stat
     defense: { // Defensa. *
       type: DataTypes.INTEGER,
       allowNull: false,
-    }, //stats.stat.name && stats.base_stat
+    }, //stats.stat.name === "defense" && stats.base_stat
     speed: { // Velocidad.
       type: DataTypes.INTEGER,
-    }, //stats.stat.name && stats.base_stat
+    }, //stats.stat.name === "speed" && stats.base_stat
     height: { // Altura.
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER, //results.height
     }, //
     weight: { // Peso.
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER, //results.weight
     },
-    created: {
+    createdInDb: {
       type: DataTypes.BOOLEAN,
       defaultValue: true,
+      allowNull: false,
     }
   });
 };

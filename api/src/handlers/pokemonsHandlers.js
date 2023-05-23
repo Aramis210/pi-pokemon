@@ -1,12 +1,11 @@
 const { createPokemon, getPokemonById, getAllPokemons, searchPokemonByName } = require("../controllers/pokemonsController")
 
-const getPokemonsHandler = (req, res) => {
+const getPokemonsHandler = async (req, res) => {
     const { name } = req.query;
 
-    const results = name ? searchPokemonByName(name) : getAllPokemons()
+    const results = name ? await searchPokemonByName(name) : await getAllPokemons()
 
-    if (name) res.send(`Quiero buscar todos los pokemon que se llamen ${name}`)
-    else res.send("Envio todos los pokemons")
+    res.status(200).json(results)
 }
 
 const getPokemonHandlerId = async (req, res) => {

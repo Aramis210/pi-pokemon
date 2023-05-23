@@ -6,21 +6,47 @@ const getPokemonById = async (id, source) => {
         source === "api"
             ? (await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`)).data
             : await Pokemons.findByPk(id);
-
-    return pokemon
+    return {
+            id: pokemon.id,
+            name: pokemon.name,
+            image: pokemon.sprites.other.dream_world.front_default,
+            hp: pokemon.stats[0].base_stat,
+            attack: pokemon.stats[1].base_stat,
+            defense: pokemon.stats[2].base_stat,
+            speed: pokemon.stats[5].base_stat,
+            height: pokemon.height,
+            weight: pokemon.weight,
+            type: pokemon.types.map((type) => type.type.name)
+        }
 }
 
-const searchPokemonByName = (name) => {
-    // https://pokeapi.co/api/v2/pokemon/{name}
+const searchPokemonByName = async (name) => {
+    const databasePokemons = await Pokemons.findAll({ where: { name: name } })
+
+    const apiPokemons = (await axios.get(`https://pokeapi.co/api/v2/pokemon/`)).data.results
+
+    // const apiPokemons = cleanArray(apiPokemonsRaw)
+
+    const filteredApi = apiPokemons.filter((pokemon) => pokemon.name === name)
+
+    return [...databasePokemons, ...filteredApi]
+
 }
 
 const getAllPokemons = async () => {
     const databasePokemons = await Pokemons.findAll()
 
-    const apiUsers = (await axios.get(`https://pokeapi.co/api/v2/pokemon/`)).data
+    const apiPokemonsRaw = (await axios.get(`https://pokeapi.co/api/v2/pokemon/`)).data.results
 
-    return [...databasePokemons, ...apiUsers]
+    const urlPorPoke = apiPokemonsRaw.map(poke => poke.url.split("/"))
 
+    const apiPokemons = []
+
+    for (let i = 0; i < urlPorPoke.length; i++) {
+        apiPokemons.push(await getPokemonById(urlPorPoke[i][6], "api"))
+    } 
+
+    return [...databasePokemons, ...apiPokemons]
 }
 
 
