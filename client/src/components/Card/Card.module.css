@@ -1,6 +1,11 @@
 .card{
     border: 1px solid black;
-    width: fit-content;
-    height: fit-content;
+    width: 200px;
+    height: 350px;
     border-radius: 10px;
+}
+
+.img{
+    max-width: 200px;
+    max-height: 200px;
 }

@@ -4,14 +4,15 @@ import { useSelector } from "react-redux"
 
 
 const CardsContainer = () => {
-    const pokemons = useSelector( state => state.pokemons)
+    const pokemons = useSelector( state => state.pokemons)    
 
     return (
         <div className={style.container}>
-            {pokemons.map(pokemon => {
+            {pokemons.map(pokemon => { 
+                console.log(pokemon)
                 return <Card
                     key={pokemon.id}
-                    name={pokemon.name}
+                    name={pokemon.name.toUpperCase()}
                     image={pokemon.image}
                     hp={pokemon.hp}
                     attack={pokemon.attack}
