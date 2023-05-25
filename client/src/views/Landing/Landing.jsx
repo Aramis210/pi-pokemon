@@ -1,10 +1,13 @@
-import './Landing.module.css'
-import { Link } from "react-router-dom"
+import style from './Landing.module.css'
+import { NavLink } from "react-router-dom"
 
 const Landing = () => {
     return (
         <div>
-            <Link to="/home">Bienvenidos a tu pagina de POKEMON</Link>
+            <h1 style={{color: "white"}}>THIS IS THE POKEDEX VIRTUAL</h1>
+            <NavLink to="/home" className={style.navLink}>
+                <button>INGRESAR</button>
+            </NavLink>
         </div>
     )
 }
