@@ -25,8 +25,6 @@ const searchPokemonByName = async (name) => {
 
     const apiPokemons = (await axios.get(`https://pokeapi.co/api/v2/pokemon/`)).data.results
 
-    // const apiPokemons = cleanArray(apiPokemonsRaw)
-
     const filteredApi = apiPokemons.filter((pokemon) => pokemon.name === name)
 
     return [...databasePokemons, ...filteredApi]
@@ -36,7 +34,7 @@ const searchPokemonByName = async (name) => {
 const getAllPokemons = async () => {
     const databasePokemons = await Pokemons.findAll()
 
-    const apiPokemonsRaw = (await axios.get(`https://pokeapi.co/api/v2/pokemon/`)).data.results
+    const apiPokemonsRaw = (await axios.get(`https://pokeapi.co/api/v2/pokemon/?offset=0&limit=100`)).data.results
 
     const urlPorPoke = apiPokemonsRaw.map(poke => poke.url.split("/"))
 

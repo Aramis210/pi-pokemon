@@ -2,31 +2,54 @@ const { Type } = require("../db");
 const axios = require("axios")
 
 const getAllTypes = async () => {
-    await axios.get("https://pokeapi.co/api/v2/type").then(({data}) => {
-        const typesInfo = data.results.map((type) => { 
-            return { name: type.name}
-        })
-        if (!typesInfo.length) throw Error ("No existen types para agregar")
-        return typesInfo
-    })    
-}
+    const typesInfo = (await axios.get("https://pokeapi.co/api/v2/type")).data.results    
+    
+    const filteredApi = typesInfo.map((type) => type.name)    
 
-// const getApiData = async () =>
-//   await axios.get(`${URL}?${API_KEY}`).then(({ data }) => {
-//     const dogsInfo = data.map((dog) => {
-//       return {
-//         id: dog.id,
-//         image: dog.image?.url,
-//         name: dog.name,
-//         weight: dog.weight.metric,
-//         height: dog.height.metric,
-//         life_span: dog.life_span,
-//         belongToDb: false,
-//         temperament: dog.temperament,
-//       };
+    filteredApi.forEach( async (type) => {
+        await Type.findOrCreate({
+          where: { name: type.toLowerCase() },
+        });
+      });
+
+    const allTypesDb = await Type.findAll()
+
+    return allTypesDb
+      
+    }
+
+
+// const getApiData = require("../ApiData");
+// const { Temperament } = require("../../db");
+
+// const getAllTemper = async () => {
+//   const allTemperDB = await Temperament.findAll();
+
+//   if (allTemperDB.length === 0) {
+//     const getDogs = await getApiData();
+
+//     // for get an array of tempers(stirngs)
+//     const getTemper = getDogs
+//       .map((dog) => dog.temperament)
+//       .join(", ")
+//       .split(", ");
+
+//     const getFilteredTemper = getTemper.filter((temper) => temper !== "");
+
+//     getFilteredTemper.forEach( async (temper) => {
+//       await Temperament.findOrCreate({
+//         where: { name: temper.toLowerCase() },
+//       });
 //     });
-//     if(!dogsInfo.length) throw Error ("No se podido solicitar la información de manera corre
-//     return dogsInfo
+
+//     const allTemper = await Temperament.findAll();
+//     if (!allTemper) throw Error("Can't get temperaments form DB");
+
+//     return allTemper;
+//   } else {
+//     return allTemperDB;
+//   }
+// };
 
 
 module.exports = {
