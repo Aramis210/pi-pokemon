@@ -1,15 +1,17 @@
 // import CardsContainer from "../../components/CardsContainer/CardsContainer";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getPokemons } from "../../redux/actions"
+import { getPokemons, filterPokemonsByTypes, filterCreated, orderByName } from "../../redux/actions"
 import style from "./Home.module.css"
 import Paginado from "../../components/Paginado/Paginado"
+import SearchBar from "../../components/SearchBar/SearchBar";
 import Card from "../../components/Card/Card"
 
 const Home = () => {
     const dispatch = useDispatch();
     const pokemons = useSelector(state => state.pokemons)
     const [currentPage, setCurrentPage] = useState(1)
+    const [orden, setOrden] = useState("")
     const [characterPerPage, setCharactersPerPage] = useState(12)
     const indexOfLastCharacter = currentPage * characterPerPage
     const indexOfFirstCharacter = indexOfLastCharacter - characterPerPage
@@ -21,23 +23,57 @@ const Home = () => {
 
     useEffect(() => {
         dispatch(getPokemons());
-    }, [dispatch, setCharactersPerPage, currentCharacters])
+    }, [dispatch])
+
+    function handlerFilterTypes(event){
+        dispatch(filterPokemonsByTypes(event.target.value))
+    }
+
+    function handlerFilterCreated(event){
+        dispatch(filterCreated(event.target.value))
+    }
+
+    function handlerSort (event) {
+        event.preventDefault();
+        dispatch(orderByName(event.target.value))
+        setCurrentPage(1)
+        setOrden(`Ordenado ${event.target.value}`)
+    }
 
     return (
         <>
             <h1 className={style.title}>WELCOME TO POKEDEX VIRTUAL</h1>
             <div>
-                <select>
-                    <option value="types">Types</option>
+                <select onChange= {event => handlerFilterTypes(event)}>
+                    <option value="allTypes">All types</option>
+                    <option value="normal">Normal</option>
+                    <option value="fighting">Fighting</option>
+                    <option value="flying">Flying</option>
+                    <option value="ground">Ground</option>
+                    <option value="poison">Poison</option>
+                    <option value="steel">Steel</option>
+                    <option value="rock">Rock</option>
+                    <option value="fire">Fire</option>
+                    <option value="bug">Bug</option>
+                    <option value="water">Water</option>
+                    <option value="grass">Grass</option>
+                    <option value="electric">Electric</option>
+                    <option value="psychic">Psychic</option>
+                    <option value="ice">Ice</option>
+                    <option value="dragon">Dragon</option>
+                    <option value="dark">Dark</option>
+                    <option value="fairy">Fairy</option>
+                    <option value="unknown">Unknown</option>
+                    <option value="shadow">Shadow</option>
                 </select>
-                <select>
+                <select onChange= {event => handlerFilterCreated(event)}>
                     <option value="all">All</option>
                     <option value="created">Created</option>
-                    <option value="api">Not created</option>
+                    <option value="not created">Not created</option>
                 </select>
             </div>
             <div>
-                <select>
+                <select onChange= {event => handlerSort(event)}>
                     <option value="asc">Upward A-Z</option>
                     <option value="des">Falling Z-A</option>
                 </select>
@@ -51,6 +87,7 @@ const Home = () => {
                     pokemons={pokemons.length}
                     paginado={paginado}
                 />
+                <SearchBar/>
 
             </div>
             <p></p>

@@ -10,7 +10,8 @@ const Form = () => {
         speed: "",
         height: "",
         weight: "",
-        image: ""
+        image: "",
+        type: []
     })
 
     const [errors, setErrors] = useState({
@@ -21,7 +22,8 @@ const Form = () => {
         speed: "",
         height: "",
         weight: "",
-        image: ""
+        image: "",
+        type: []
     })
 
     const changeHandler = (event) => {
@@ -86,6 +88,11 @@ const Form = () => {
                 <label>Image URL: </label>
                 <input type="text" value={form.image} onChange={changeHandler} name="image" />
             </h2>
+            {/* <h2>
+                <select>
+                    <option value={type.id}>{type.name}</option>
+                </select>
+            </h2> */}
             <button type="submit">SUBMIT</button>
         </form>
     )
